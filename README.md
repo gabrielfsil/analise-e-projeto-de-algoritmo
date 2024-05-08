@@ -7,12 +7,20 @@ de ligações ( de uma a dez vezes o número de vértices ).
 
 2 – Implementar um algoritmo que gere a representação matricial ( matriz adjacência binária )
 
+![Matriz de Adjacência](assets/matrix.png)
+
 3 – Implementar um algoritmo que, a partir da matriz, gere a representação vetorial ( vetor
 binário )de sua parte triangular superior.
 
+![Vetor Binário](assets/vector.png)
+
 4 – Gerar o vetor compactado ( vetor de índices inteiros ) com endereçamento indireto.
 
+![Vetor de Índices](assets/index-vector.png)
+
 5 – Implementar um algoritmo que a partir do vetor compactado gere a matriz de adjacência.
+
+![Transformação de Vetor de Índice em Matriz de Adjacência](assets/reverse.png)
 
 6 – Implementar a função de mapeamento que a partir da entrada (i,j) da matriz de adjacência
 de ordem n acesse a posição k do vetor de índices. Implementar o cálculo analítico (
