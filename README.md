@@ -26,9 +26,13 @@ binário )de sua parte triangular superior.
 de ordem n acesse a posição k do vetor de índices. Implementar o cálculo analítico (
 progressão aritmética ) e também os procedimentos iterativo e recursivo.
 
+![Mapeamento](assets/mapping.png)
+
 7 – Implementar a função de mapeamento inversa que a partir do índice k do vetor acesse a
 posição (i,j) da matriz de adjacência de ordem n. Implementar o cálculo analítico ( algoritmo
 raiz quadrada ) e também o procedimento iterativo.
+
+![Mapeamento](assets/reverse-mapping.png)
 
 8 – Implementar as operações de soma ( operação de união ) , produto direto ( operação de
 interseção ) entre duas matrizes utilizando suas respectivas representações vetoriais.
