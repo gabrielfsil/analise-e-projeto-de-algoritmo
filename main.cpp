@@ -33,6 +33,7 @@ int main(int, char *[])
     }
     delete[] adjMatrix;
     delete vector;
+    delete indexVector;
     delete graph;
 
     return 0;
