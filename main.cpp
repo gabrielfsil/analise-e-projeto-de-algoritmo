@@ -22,6 +22,11 @@ int main(int, char *[])
 
     printer.printVector(vector, size);
 
+    int *indexVector = graph->getIndexVector();
+    int sizeIndex = graph->getSizeIndexVector();
+
+    printer.printVector(indexVector, sizeIndex);
+
     for (int i = 0; i < n; ++i)
     {
         delete[] adjMatrix[i];
