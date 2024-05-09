@@ -35,3 +35,29 @@ interseção ) entre duas matrizes utilizando suas respectivas representações 
 
 Obs.: Todos os algoritmos devem ser testados bem como determinado as suas funções de
 complexidade.
+
+## Execução
+
+Clonar o repositório:
+
+```
+git clone git@github.com:gabrielfsil/analise-e-projeto-de-algoritmo.git
+```
+
+Acessar a pasta do projeto:
+
+```
+cd analise-e-projeto-de-algoritmo
+```
+
+Para compilar o projeto basta executar o comando na pasta raiz do projeto
+
+```
+make
+```
+
+E para executar:
+
+```
+./bin/main
+```
