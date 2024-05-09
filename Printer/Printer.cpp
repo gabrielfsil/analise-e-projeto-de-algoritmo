@@ -6,7 +6,7 @@ using namespace std;
 void Printer::printMatrix(int **matrix, int n)
 {
     cout << endl
-         << "------- Matriz de Adjacência -------" << endl
+         << "------- Matriz -------" << endl
          << endl;
     for (int i = 0; i < n; i++)
     {
@@ -23,7 +23,7 @@ void Printer::printMatrix(int **matrix, int n)
 void Printer::printVector(int *vector, int size)
 {
     cout << endl
-         << "------- Vetor Binário -------" << endl
+         << "------- Vetor -------" << endl
          << endl;
     cout << "[";
     for (int i = 0; i < size; i++)

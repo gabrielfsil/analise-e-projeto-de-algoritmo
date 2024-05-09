@@ -5,9 +5,11 @@ using namespace std;
 
 RandomGraph::RandomGraph(int n)
 {
-    this->n = n;
+    this->numVertices = n;
+    this->numEdges = n * 2;
     this->adjMatrix = this->generateAdjMatrix(n);
     this->vector = this->generateVectorFromAdjMatrix();
+    this->indexVector = this->generateIndexVectorFromVector();
 }
 
 int **RandomGraph::generateAdjMatrix(int n)
@@ -18,7 +20,7 @@ int **RandomGraph::generateAdjMatrix(int n)
         matrix[i] = new int[n]();
     }
 
-    int m = n * 2;
+    int m = this->numEdges;
 
     while (m > 0)
     {
@@ -41,15 +43,15 @@ int **RandomGraph::generateAdjMatrix(int n)
 
 int *RandomGraph::generateVectorFromAdjMatrix()
 {
-    int size = (this->n * (this->n - 1)) / 2;
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
 
     int *binaryVector = new int[size];
 
     int k = 0;
 
-    for (int i = 0; i < n - 1; i++)
+    for (int i = 0; i < this->numVertices - 1; i++)
     {
-        for (int j = i + 1; j < n; j++)
+        for (int j = i + 1; j < this->numVertices; j++)
         {
             binaryVector[k] = this->adjMatrix[i][j];
             k++;
@@ -61,7 +63,27 @@ int *RandomGraph::generateVectorFromAdjMatrix()
 
 int RandomGraph::getSizeVector()
 {
-    int size = (this->n * (this->n - 1)) / 2;
-    
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
+
     return size;
+}
+
+int *RandomGraph::generateIndexVectorFromVector()
+{
+    int sizeIndex = this->numEdges;
+    int *indexVector = new int[sizeIndex];
+
+    int size = this->getSizeVector();
+
+    int k = 0;
+    for (int i = 0; i < size; i++)
+    {
+        if (this->vector[i] == 1)
+        {
+            indexVector[k] = i;
+            k++;
+        }
+    }
+
+    return indexVector;
 }
