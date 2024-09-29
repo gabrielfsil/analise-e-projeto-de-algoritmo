@@ -9,7 +9,6 @@ private:
     int **adjMatrix;
     int *vector;
     int *indexVector;
-    int sumUntilRow(int row);
 
 public:
     RandomGraph(int n);
@@ -19,13 +18,10 @@ public:
     int *getIndexVector() { return this->indexVector; };
     int getSizeVector();
     int getSizeIndexVector() { return this->numEdges; };
-    int **generateAdjMatrix(int n);
+    int **generateAdjMatrix();
     int *generateVectorFromAdjMatrix();
     int *generateIndexVectorFromVector();
     int **generateAdjMatrixFromIndexVector();
-    int mapIndex(int row, int col);
-    int mapRow(int index);
-    int mapColumn(int index, int row);
 };
 
 #endif

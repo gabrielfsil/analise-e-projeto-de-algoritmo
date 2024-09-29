@@ -9,17 +9,17 @@ RandomGraph::RandomGraph(int n)
 {
     this->numVertices = n;
     this->numEdges = n * 2;
-    this->adjMatrix = this->generateAdjMatrix(n);
+    this->adjMatrix = this->generateAdjMatrix();
     this->vector = this->generateVectorFromAdjMatrix();
     this->indexVector = this->generateIndexVectorFromVector();
 }
 
-int **RandomGraph::generateAdjMatrix(int n)
+int **RandomGraph::generateAdjMatrix()
 {
-    int **matrix = new int *[n];
-    for (int i = 0; i < n; i++)
+    int **matrix = new int *[this->numVertices];
+    for (int i = 0; i < this->numVertices; i++)
     {
-        matrix[i] = new int[n]();
+        matrix[i] = new int[this->numVertices]();
     }
 
     int m = this->numEdges;
@@ -29,8 +29,8 @@ int **RandomGraph::generateAdjMatrix(int n)
 
         RandomNumber generator;
 
-        int i = generator.random(0, n - 1);
-        int j = generator.random(0, n - 1);
+        int i = generator.random(0, this->numVertices - 1);
+        int j = generator.random(0, this->numVertices - 1);
 
         if (i != j && matrix[i][j] == 0)
         {
@@ -39,6 +39,8 @@ int **RandomGraph::generateAdjMatrix(int n)
             m--;
         }
     }
+
+    this->adjMatrix = matrix;
 
     return matrix;
 }
@@ -59,6 +61,8 @@ int *RandomGraph::generateVectorFromAdjMatrix()
             k++;
         }
     }
+
+    this->vector = binaryVector;
 
     return binaryVector;
 }
@@ -87,37 +91,9 @@ int *RandomGraph::generateIndexVectorFromVector()
         }
     }
 
+    this->indexVector = indexVector;
+
     return indexVector;
-}
-
-int RandomGraph::sumUntilRow(int row)
-{
-    return (this->numVertices - 1 + this->numVertices - row - 1) * (row + 1) / 2;
-}
-
-
-int RandomGraph::mapIndex(int row, int col)
-{
-    return this->sumUntilRow(row - 1) + col - row - 1;
-}
-
-int RandomGraph::mapRow(int index)
-{
-    int row = 0;
-
-    while (this->sumUntilRow(row) <= index)
-    {
-        row++;
-    }
-
-    return row;
-}
-
-int RandomGraph::mapColumn(int index, int row)
-{
-    int col = index - this->sumUntilRow(row - 1) + row + 1;
-
-    return col;
 }
 
 int **RandomGraph::generateAdjMatrixFromIndexVector()
@@ -128,13 +104,19 @@ int **RandomGraph::generateAdjMatrixFromIndexVector()
         matrix[i] = new int[this->numVertices]();
     }
 
-    for (int i = 0; i <= this->numEdges - 1; i++)
+    for (int a = 0; a <= this->numEdges - 1; a++)
     {
-        int index = this->indexVector[i];
+        int k = this->indexVector[a];
 
-        int row = this->mapRow(index);
+        int soma = 0;
+        int row = 0;
+        while(soma <= k){
+            soma += this->numVertices - row - 1;
+            row++;
+        }
+        row--;
 
-        int col = this->mapColumn(index, row);
+        int col = k - row* this->numVertices + row*(row + 1)/2 + row + 1;
 
         matrix[row][col] = 1;
         matrix[col][row] = 1;
