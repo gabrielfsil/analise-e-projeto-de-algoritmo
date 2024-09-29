@@ -1,5 +1,7 @@
 #include "RandomGraph/RandomGraph.h"
+#include "OperatorMatrix/OperatorMatrix.h"
 #include "Printer/Printer.h"
+#include <iostream>
 #define N 10
 
 using namespace std;
@@ -8,41 +10,75 @@ int main(int, char *[])
 {
 
     int n = N;
+    Printer printer;
 
     RandomGraph *graph = new RandomGraph(n);
 
-    Printer printer;
+    int **adjMatrix1 = graph->generateAdjMatrix(n);
 
-    int **adjMatrix = graph->getAdjMatrix();
+    int **adjMatrix2 = graph->generateAdjMatrix(n);
 
-    printer.printMatrix(adjMatrix, n);
+    cout << "Representação Matricial" << endl;
+    printer.printMatrix(adjMatrix1, n);
+    printer.printMatrix(adjMatrix2, n);
 
-    int *vector = graph->getVector();
-    int size = graph->getSizeVector();
+    int *vector1 = graph->generateVectorFromAdjMatrix(adjMatrix1);
+    int size1 = graph->getSizeVector();
 
-    printer.printVector(vector, size);
+    int *vector2 = graph->generateVectorFromAdjMatrix(adjMatrix2);
+    int size2 = graph->getSizeVector();
 
-    int *indexVector = graph->getIndexVector();
-    int sizeIndex = graph->getSizeIndexVector();
+    cout << "Representação Vetorial" << endl;
+    printer.printVector(vector1, size1);
+    printer.printVector(vector2, size2);
 
-    printer.printVector(indexVector, sizeIndex);
+    int *indexVector1 = graph->generateIndexVectorFromVector(vector1);
+    int sizeIndex1 = graph->getSizeIndexVector();
 
-    int **adjMatrixFromIndexVector = graph->generateAdjMatrixFromIndexVector();
+    int *indexVector2 = graph->generateIndexVectorFromVector(vector2);
+    int sizeIndex2 = graph->getSizeIndexVector();
 
-    printer.printMatrix(adjMatrixFromIndexVector,n);
+    cout << "Representação de Índices" << endl;
+    printer.printVector(indexVector1, sizeIndex1);
+    printer.printVector(indexVector2, sizeIndex2);
+
+    int **adjMatrixFromIndexVector1 = graph->generateAdjMatrixFromIndexVector(indexVector1);
+
+    int **adjMatrixFromIndexVector2 = graph->generateAdjMatrixFromIndexVector(indexVector2);
+
+    cout << "Representação Matricial a partir de Índices" << endl;
+    printer.printMatrix(adjMatrixFromIndexVector1,n);
+    printer.printMatrix(adjMatrixFromIndexVector2,n);
+
+    OperatorMatrix operatorMatrix;
+
+    cout << "Soma de Vetores" << endl;
+    int *vectorSum = operatorMatrix.sum(vector1, vector2, n);
+    printer.printVector(vectorSum, size1);
+
+    cout << "Multiplicação de Matrizes" << endl;
+    int **matrixMultiplication = operatorMatrix.multiply(vector1, vector2, n);
+    printer.printMatrix(matrixMultiplication, n);
 
     for (int i = 0; i < n; ++i)
     {
-        delete[] adjMatrixFromIndexVector[i];
+        delete[] adjMatrixFromIndexVector1[i];
+        delete[] adjMatrixFromIndexVector2[i];
+        delete[] adjMatrix1[i];
+        delete[] adjMatrix2[i];
+        delete[] matrixMultiplication[i];
     }
-
-    for (int i = 0; i < n; ++i)
-    {
-        delete[] adjMatrix[i];
-    }
-    delete[] adjMatrix;
-    delete vector;
-    delete indexVector;
+    delete[] adjMatrix1;
+    delete[] adjMatrix2;
+    delete[] adjMatrixFromIndexVector1;
+    delete[] adjMatrixFromIndexVector2;
+    delete[] matrixMultiplication;
+    
+    delete[] vector1;
+    delete[] vector2;
+    delete[] indexVector1;
+    delete[] indexVector2;
+    delete[] vectorSum;
     delete graph;
 
     return 0;

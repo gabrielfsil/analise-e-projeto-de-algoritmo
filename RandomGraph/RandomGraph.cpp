@@ -1,5 +1,6 @@
 #include "RandomGraph.h"
 #include "../RandomNumber/RandomNumber.h"
+#include "../OperatorMatrix/OperatorMatrix.h"
 #include <cmath>
 #include <iostream>
 
@@ -9,17 +10,14 @@ RandomGraph::RandomGraph(int n)
 {
     this->numVertices = n;
     this->numEdges = n * 2;
-    this->adjMatrix = this->generateAdjMatrix();
-    this->vector = this->generateVectorFromAdjMatrix();
-    this->indexVector = this->generateIndexVectorFromVector();
 }
 
-int **RandomGraph::generateAdjMatrix()
+int **RandomGraph::generateAdjMatrix(int n)
 {
-    int **matrix = new int *[this->numVertices];
-    for (int i = 0; i < this->numVertices; i++)
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; i++)
     {
-        matrix[i] = new int[this->numVertices]();
+        matrix[i] = new int[n]();
     }
 
     int m = this->numEdges;
@@ -29,8 +27,8 @@ int **RandomGraph::generateAdjMatrix()
 
         RandomNumber generator;
 
-        int i = generator.random(0, this->numVertices - 1);
-        int j = generator.random(0, this->numVertices - 1);
+        int i = generator.random(0, n - 1);
+        int j = generator.random(0, n - 1);
 
         if (i != j && matrix[i][j] == 0)
         {
@@ -40,14 +38,12 @@ int **RandomGraph::generateAdjMatrix()
         }
     }
 
-    this->adjMatrix = matrix;
-
     return matrix;
 }
 
-int *RandomGraph::generateVectorFromAdjMatrix()
+int *RandomGraph::generateVectorFromAdjMatrix(int **matrix)
 {
-    int size = this->getSizeVector();
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
 
     int *binaryVector = new int[size];
 
@@ -57,12 +53,10 @@ int *RandomGraph::generateVectorFromAdjMatrix()
     {
         for (int j = i + 1; j < this->numVertices; j++)
         {
-            binaryVector[k] = this->adjMatrix[i][j];
+            binaryVector[k] = matrix[i][j];
             k++;
         }
     }
-
-    this->vector = binaryVector;
 
     return binaryVector;
 }
@@ -74,7 +68,7 @@ int RandomGraph::getSizeVector()
     return size;
 }
 
-int *RandomGraph::generateIndexVectorFromVector()
+int *RandomGraph::generateIndexVectorFromVector(int *vector)
 {
     int sizeIndex = this->numEdges;
     int *indexVector = new int[sizeIndex];
@@ -84,19 +78,17 @@ int *RandomGraph::generateIndexVectorFromVector()
     int k = 0;
     for (int i = 0; i < size; i++)
     {
-        if (this->vector[i] == 1)
+        if (vector[i] == 1)
         {
             indexVector[k] = i;
             k++;
         }
     }
 
-    this->indexVector = indexVector;
-
     return indexVector;
 }
 
-int **RandomGraph::generateAdjMatrixFromIndexVector()
+int **RandomGraph::generateAdjMatrixFromIndexVector(int *indexVector)
 {
     int **matrix = new int *[this->numVertices];
     for (int i = 0; i < this->numVertices; i++)
@@ -104,22 +96,16 @@ int **RandomGraph::generateAdjMatrixFromIndexVector()
         matrix[i] = new int[this->numVertices]();
     }
 
+    OperatorMatrix operatorMatrix;
+
     for (int a = 0; a <= this->numEdges - 1; a++)
     {
-        int k = this->indexVector[a];
+        int k = indexVector[a];
 
-        int sum = 0;
-        int row = 0;
-        while(sum <= k){
-            sum += this->numVertices - row - 1;
-            row++;
-        }
-        row--;
+        pair<int,int> p = operatorMatrix.convertToPair(k, this->numVertices);
 
-        int col = k - row* this->numVertices + row*(row + 1)/2 + row + 1;
-
-        matrix[row][col] = 1;
-        matrix[col][row] = 1;
+        matrix[p.first][p.second] = 1;
+        matrix[p.second][p.first] = 1;
     }
 
     return matrix;
