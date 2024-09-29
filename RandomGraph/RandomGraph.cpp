@@ -1,5 +1,7 @@
 #include "RandomGraph.h"
 #include "../RandomNumber/RandomNumber.h"
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -43,7 +45,7 @@ int **RandomGraph::generateAdjMatrix(int n)
 
 int *RandomGraph::generateVectorFromAdjMatrix()
 {
-    int size = (this->numVertices * (this->numVertices - 1)) / 2;
+    int size = this->getSizeVector();
 
     int *binaryVector = new int[size];
 
@@ -86,4 +88,57 @@ int *RandomGraph::generateIndexVectorFromVector()
     }
 
     return indexVector;
+}
+
+int RandomGraph::sumUntilRow(int row)
+{
+    return (this->numVertices - 1 + this->numVertices - row - 1) * (row + 1) / 2;
+}
+
+
+int RandomGraph::mapIndex(int row, int col)
+{
+    return this->sumUntilRow(row - 1) + col - row - 1;
+}
+
+int RandomGraph::mapRow(int index)
+{
+    int row = 0;
+
+    while (this->sumUntilRow(row) <= index)
+    {
+        row++;
+    }
+
+    return row;
+}
+
+int RandomGraph::mapColumn(int index, int row)
+{
+    int col = index - this->sumUntilRow(row - 1) + row + 1;
+
+    return col;
+}
+
+int **RandomGraph::generateAdjMatrixFromIndexVector()
+{
+    int **matrix = new int *[this->numVertices];
+    for (int i = 0; i < this->numVertices; i++)
+    {
+        matrix[i] = new int[this->numVertices]();
+    }
+
+    for (int i = 0; i <= this->numEdges - 1; i++)
+    {
+        int index = this->indexVector[i];
+
+        int row = this->mapRow(index);
+
+        int col = this->mapColumn(index, row);
+
+        matrix[row][col] = 1;
+        matrix[col][row] = 1;
+    }
+
+    return matrix;
 }
