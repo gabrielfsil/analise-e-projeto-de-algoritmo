@@ -102,7 +102,7 @@ Complexidade:
 
 Complexidade:
 
-- **Melhor Caso**: *O($m*n$)*, no caso de um grafo esparso, com poucas arestas, a complexidade será menor, proporcional a *O(n)*
+- **Melhor Caso**: *O(m×n)*, no caso de um grafo esparso, com poucas arestas, a complexidade será menor, proporcional a *O(n)*
 - **Pior Caso**: *O(n³)*, para um grafo completo
 
 ![Transformação de Vetor de Índice em Matriz de Adjacência](assets/reverse.png)
