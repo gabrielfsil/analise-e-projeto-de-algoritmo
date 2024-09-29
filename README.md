@@ -8,8 +8,16 @@ de ligações ( de uma a dez vezes o número de vértices ).
 2 – Implementar um algoritmo que gere a representação matricial ( matriz adjacência binária )
 
 ```
+int **RandomGraph::generateAdjMatrix(int n)
+{
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; i++)
+    {
+        matrix[i] = new int[n]();
+    }
+
     int m = this->numEdges;
-    
+
     while (m > 0)
     {
 
@@ -25,6 +33,9 @@ de ligações ( de uma a dez vezes o número de vértices ).
             m--;
         }
     }
+
+    return matrix;
+}
 ```
 
 Complexidade:
@@ -38,16 +49,25 @@ Complexidade:
 binário )de sua parte triangular superior.
 
 ```
+int *RandomGraph::generateVectorFromAdjMatrix(int **matrix)
+{
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
+
+    int *binaryVector = new int[size];
+
     int k = 0;
 
     for (int i = 0; i < this->numVertices - 1; i++)
     {
         for (int j = i + 1; j < this->numVertices; j++)
         {
-            binaryVector[k] = this->adjMatrix[i][j];
+            binaryVector[k] = matrix[i][j];
             k++;
         }
     }
+
+    return binaryVector;
+}
 ```
 Complexidade:
 
@@ -59,17 +79,25 @@ Complexidade:
 4 – Gerar o vetor compactado ( vetor de índices inteiros ) com endereçamento indireto.
 
 ```
+int *RandomGraph::generateIndexVectorFromVector(int *vector)
+{
+    int sizeIndex = this->numEdges;
+    int *indexVector = new int[sizeIndex];
+
     int size = (this->numVertices * (this->numVertices - 1)) / 2;
 
     int k = 0;
     for (int i = 0; i < size; i++)
     {
-        if (this->vector[i] == 1)
+        if (vector[i] == 1)
         {
             indexVector[k] = i;
             k++;
         }
     }
+
+    return indexVector;
+}
 ```
 
 Complexidade:
@@ -81,23 +109,28 @@ Complexidade:
 5 – Implementar um algoritmo que a partir do vetor compactado gere a matriz de adjacência.
 
 ```
+int **RandomGraph::generateAdjMatrixFromIndexVector(int *indexVector)
+{
+    int **matrix = new int *[this->numVertices];
+    for (int i = 0; i < this->numVertices; i++)
+    {
+        matrix[i] = new int[this->numVertices]();
+    }
+
+    OperatorMatrix operatorMatrix;
+
     for (int a = 0; a <= this->numEdges - 1; a++)
     {
-        int k = this->indexVector[a];
+        int k = indexVector[a];
 
-        int sum = 0;
-        int row = 0;
-        while(sum <= k){
-            sum += this->numVertices - row - 1;
-            row++;
-        }
-        row--;
+        pair<int,int> p = operatorMatrix.convertToPair(k, this->numVertices);
 
-        int col = k - row* this->numVertices + row*(row + 1)/2 + row + 1;
-
-        matrix[row][col] = 1;
-        matrix[col][row] = 1;
+        matrix[p.first][p.second] = 1;
+        matrix[p.second][p.first] = 1;
     }
+
+    return matrix;
+}
 ```
 
 Complexidade:
@@ -111,16 +144,134 @@ Complexidade:
 de ordem n acesse a posição k do vetor de índices. Implementar o cálculo analítico (
 progressão aritmética ) e também os procedimentos iterativo e recursivo.
 
+Cálculo Analítico:
+```
+int OperatorMatrix::convertToIndex(int i, int j, int n)
+{
+    int index = 0;
+
+    if (i < j)
+    {
+        index = (i * (2 * n - i - 1)) / 2 + (j - i - 1);
+    }
+    else
+    {
+        index = (j * (2 * n - j - 1)) / 2 + (i - j - 1);
+    }
+
+    return index;
+}
+```
+
 ![Mapeamento](assets/mapping.png)
 
 7 – Implementar a função de mapeamento inversa que a partir do índice k do vetor acesse a
 posição (i,j) da matriz de adjacência de ordem n. Implementar o cálculo analítico ( algoritmo
 raiz quadrada ) e também o procedimento iterativo.
 
+Cálculo Analítico:
+```
+std::pair<int, int> OperatorMatrix::convertToPair(int k, int n)
+{
+    int row = floor((2*n - 1 - sqrt((2*n - 1)*(2*n - 1) - 8*k))/2);
+    int soma = (row*(2*n - row - 1))/2;
+
+    int col = k - soma + row + 1;
+    
+    return make_pair(row, col);
+}
+```
+
+Procedimento Iterativo:
+```
+std::pair<int, int> OperatorMatrix::convertToPairPA(int k, int n)
+{
+    int sum = 0;
+    int row = 0;
+    while (sum <= k)
+    {
+        sum += n - row - 1;
+        row++;
+    }
+    row--;
+
+    int col = k - row * n + row * (row + 1) / 2 + row + 1;
+
+    return make_pair(row, col);
+}
+```
+
 ![Mapeamento](assets/reverse-mapping.png)
 
 8 – Implementar as operações de soma ( operação de união ) , produto direto ( operação de
 interseção ) entre duas matrizes utilizando suas respectivas representações vetoriais.
+
+Operação de Soma:
+```
+int *OperatorMatrix::sum(int *vetor1, int *vetor2, int n)
+{
+    int tam = (n * (n - 1))/2;
+
+    int *result = new int[tam];
+    
+
+    for (int i = 0; i < tam; i++)
+    {
+        result[i] = vetor1[i] + vetor2[i];
+    }
+    
+    return result;
+}
+```
+
+Operação de Multiplicação:
+```
+int **OperatorMatrix::multiply(int *vetor1, int *vetor2, int n)
+{
+    int **matrix = new int *[n];
+    for (int i = 0; i < n; i++)
+    {
+        matrix[i] = new int[n]();
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            int temp = 0;
+            for(int x = 0; x < n; x++)
+            {
+                int a = 0;
+                int b = 0;
+
+                if(x > i){
+                    int k = this->convertToIndex(i, x, n);
+                    a = vetor1[k];
+                }
+                else if(x < i){
+                    int k = this->convertToIndex(x, i, n);
+                    a = vetor1[k];
+                }
+
+                if(j > x){
+                    int k = this->convertToIndex(x, j, n);
+                    b = vetor2[k];
+                }
+                else if(j < x){
+                    int k = this->convertToIndex(j, x, n);
+                    b = vetor2[k];
+                }
+
+                temp += a * b;
+            }
+            matrix[i][j] = temp;
+            temp = 0;
+        }
+    }
+
+    return matrix;
+}
+```
 
 Obs.: Todos os algoritmos devem ser testados bem como determinado as suas funções de
 complexidade.
