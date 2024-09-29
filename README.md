@@ -27,6 +27,11 @@ de ligações ( de uma a dez vezes o número de vértices ).
     }
 ```
 
+Complexidade:
+
+- **Melhor Caso**: *O(m)*, onde todas as arestas são inseridas rapidamente sem muitas rejeições.
+- **Pior Caso**: *O(m×n²)*, onde encontrar uma aresta válida se torna cada vez mais difícil devido à densidade da matriz.
+
 ![Matriz de Adjacência](assets/matrix.png)
 
 3 – Implementar um algoritmo que, a partir da matriz, gere a representação vetorial ( vetor
@@ -44,12 +49,18 @@ binário )de sua parte triangular superior.
         }
     }
 ```
+Complexidade:
+
+- *O(n²)*, o algoritmo percorre o triângulo superior da matriz de adjacência, o que envolve $n*(n - 1)/2$ iterações no total
+
 
 ![Vetor Binário](assets/vector.png)
 
 4 – Gerar o vetor compactado ( vetor de índices inteiros ) com endereçamento indireto.
 
 ```
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
+
     int k = 0;
     for (int i = 0; i < size; i++)
     {
@@ -61,6 +72,10 @@ binário )de sua parte triangular superior.
     }
 ```
 
+Complexidade:
+
+- *O(n²)*: O algoritmo percorre todos os *O(n²)* elementos do vetor vector, realizando uma comparação e, possivelmente, uma atribuição de índice. Como o número de elementos cresce quadraticamente com o número de vértices no grafo, a complexidade do algoritmo também é quadrática.
+
 ![Vetor de Índices](assets/index-vector.png)
 
 5 – Implementar um algoritmo que a partir do vetor compactado gere a matriz de adjacência.
@@ -70,10 +85,10 @@ binário )de sua parte triangular superior.
     {
         int k = this->indexVector[a];
 
-        int soma = 0;
+        int sum = 0;
         int row = 0;
-        while(soma <= k){
-            soma += this->numVertices - row - 1;
+        while(sum <= k){
+            sum += this->numVertices - row - 1;
             row++;
         }
         row--;
@@ -84,6 +99,11 @@ binário )de sua parte triangular superior.
         matrix[col][row] = 1;
     }
 ```
+
+Complexidade:
+
+- **Melhor Caso**: *O($m*n$)*, no caso de um grafo esparso, com poucas arestas, a complexidade será menor, proporcional a *O(n)*
+- **Pior Caso**: *O(n³)*, para um grafo completo
 
 ![Transformação de Vetor de Índice em Matriz de Adjacência](assets/reverse.png)
 

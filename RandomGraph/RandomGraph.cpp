@@ -79,7 +79,7 @@ int *RandomGraph::generateIndexVectorFromVector()
     int sizeIndex = this->numEdges;
     int *indexVector = new int[sizeIndex];
 
-    int size = this->getSizeVector();
+    int size = (this->numVertices * (this->numVertices - 1)) / 2;
 
     int k = 0;
     for (int i = 0; i < size; i++)
@@ -108,10 +108,10 @@ int **RandomGraph::generateAdjMatrixFromIndexVector()
     {
         int k = this->indexVector[a];
 
-        int soma = 0;
+        int sum = 0;
         int row = 0;
-        while(soma <= k){
-            soma += this->numVertices - row - 1;
+        while(sum <= k){
+            sum += this->numVertices - row - 1;
             row++;
         }
         row--;
