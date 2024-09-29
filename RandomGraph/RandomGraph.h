@@ -9,9 +9,6 @@ private:
     int **adjMatrix;
     int *vector;
     int *indexVector;
-    int **generateAdjMatrix(int n);
-    int *generateVectorFromAdjMatrix();
-    int *generateIndexVectorFromVector();
 
 public:
     RandomGraph(int n);
@@ -21,6 +18,10 @@ public:
     int *getIndexVector() { return this->indexVector; };
     int getSizeVector();
     int getSizeIndexVector() { return this->numEdges; };
+    int **generateAdjMatrix();
+    int *generateVectorFromAdjMatrix();
+    int *generateIndexVectorFromVector();
+    int **generateAdjMatrixFromIndexVector();
 };
 
 #endif
