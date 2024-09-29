@@ -163,6 +163,54 @@ int OperatorMatrix::convertToIndex(int i, int j, int n)
 }
 ```
 
+Procedimento Iterativo:
+```
+int OperatorMatrix::convertToIndexItr(int i, int j, int n)
+{
+    if( i==j) return -1;
+    
+    if (i > j) 
+    {
+        int tmp = i;
+        i = j;
+        j = tmp;
+    }
+    
+    int index = 0;
+
+    for (int k = 0; k < i; k++)
+    {
+        index += n - k - 1;
+    }
+
+    return index;
+}
+```
+
+Procedimento Recursivo:
+```
+int OperatorMatrix::sumIndex(int i, int n)
+{
+    if(i == 0) return 0;
+
+    return n - i + this->sumIndex(i - 1, n);
+}
+
+int OperatorMatrix::convertToIndexRec(int i, int j, int n)
+{
+    if( i==j) return -1;
+    
+    if (i > j) 
+    {
+        int tmp = i;
+        i = j;
+        j = tmp;
+    }
+
+    return this->sumIndex(i, n) + (j - i - 1);
+}
+```
+
 ![Mapeamento](assets/mapping.png)
 
 7 – Implementar a função de mapeamento inversa que a partir do índice k do vetor acesse a
