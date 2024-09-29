@@ -21,6 +21,49 @@ int OperatorMatrix::convertToIndex(int i, int j, int n)
     return index;
 }
 
+int OperatorMatrix::convertToIndexItr(int i, int j, int n)
+{
+    if( i==j) return -1;
+    
+    if (i > j) 
+    {
+        int tmp = i;
+        i = j;
+        j = tmp;
+    }
+
+    int index = 0;
+
+    for (int k = 0; k < i; k++)
+    {
+        index += n - k - 1;
+    }
+
+    return index;
+}
+
+int OperatorMatrix::sumIndex(int i, int n)
+{
+    if(i == 0) return 0;
+
+    return n - i + this->sumIndex(i - 1, n);
+}
+
+int OperatorMatrix::convertToIndexRec(int i, int j, int n)
+{
+    if( i==j) return -1;
+    
+    if (i > j) 
+    {
+        int tmp = i;
+        i = j;
+        j = tmp;
+    }
+
+    return this->sumIndex(i, n) + (j - i - 1);
+}
+
+
 std::pair<int, int> OperatorMatrix::convertToPair(int k, int n)
 {
     int row = floor((2*n - 1 - sqrt((2*n - 1)*(2*n - 1) - 8*k))/2);
