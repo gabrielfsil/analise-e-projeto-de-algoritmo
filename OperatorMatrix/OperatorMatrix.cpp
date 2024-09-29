@@ -39,7 +39,7 @@ int OperatorMatrix::convertToIndexItr(int i, int j, int n)
         index += n - k - 1;
     }
 
-    return index;
+    return index + (j - i - 1);
 }
 
 int OperatorMatrix::sumIndex(int i, int n)

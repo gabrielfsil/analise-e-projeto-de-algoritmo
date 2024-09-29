@@ -135,8 +135,8 @@ int **RandomGraph::generateAdjMatrixFromIndexVector(int *indexVector)
 
 Complexidade:
 
-- **Melhor Caso**: *O(m×n)*, no caso de um grafo esparso, com poucas arestas, a complexidade será menor, proporcional a *O(n)*
-- **Pior Caso**: *O(n³)*, para um grafo completo
+- **Melhor Caso**: *O(m)*, no caso de um grafo esparso, com poucas arestas, a complexidade será menor, proporcional a *O(n)*
+- **Pior Caso**: *O(n²)*, para um grafo completo
 
 ![Transformação de Vetor de Índice em Matriz de Adjacência](assets/reverse.png)
 
@@ -163,6 +163,9 @@ int OperatorMatrix::convertToIndex(int i, int j, int n)
 }
 ```
 
+Complexidade:
+- *O(1)*: possui complexidade constante
+
 Procedimento Iterativo:
 ```
 int OperatorMatrix::convertToIndexItr(int i, int j, int n)
@@ -175,7 +178,7 @@ int OperatorMatrix::convertToIndexItr(int i, int j, int n)
         i = j;
         j = tmp;
     }
-    
+
     int index = 0;
 
     for (int k = 0; k < i; k++)
@@ -183,9 +186,13 @@ int OperatorMatrix::convertToIndexItr(int i, int j, int n)
         index += n - k - 1;
     }
 
-    return index;
+    return index + (j - i - 1);
 }
 ```
+
+Complexidade:
+
+- **Pior Caso**: *O(n)*, itera *n-1* vezes no pior caso
 
 Procedimento Recursivo:
 ```
@@ -210,6 +217,9 @@ int OperatorMatrix::convertToIndexRec(int i, int j, int n)
     return this->sumIndex(i, n) + (j - i - 1);
 }
 ```
+Complexidade:
+
+- **Pior Caso**: *O(n)*, a recurssão é chamada *n* vezes
 
 ![Mapeamento](assets/mapping.png)
 
@@ -230,6 +240,11 @@ std::pair<int, int> OperatorMatrix::convertToPair(int k, int n)
 }
 ```
 
+Complexidade:
+
+- **Pior Caso**: *O(1)*, a complexidade é constante
+
+
 Procedimento Iterativo:
 ```
 std::pair<int, int> OperatorMatrix::convertToPairPA(int k, int n)
@@ -248,6 +263,9 @@ std::pair<int, int> OperatorMatrix::convertToPairPA(int k, int n)
     return make_pair(row, col);
 }
 ```
+
+Complexidade:
+- **Pior Caso**: *O(n)*, o número de iterações do loop cresce aproximadamente como *O($\sqrt{k}$)*. Como k se aproxima de n² no pior caso e $\sqrt{k} = \sqrt{n²} = n$, utilizamos a função quadrática como aproximação da soma da progressão aritmética. 
 
 ![Mapeamento](assets/reverse-mapping.png)
 
@@ -271,6 +289,10 @@ int *OperatorMatrix::sum(int *vetor1, int *vetor2, int n)
     return result;
 }
 ```
+
+Complexidade:
+
+- *O(n²)*: o loop itera $n * (n -1)/2$ vezes, o que se aproxima da função quadrática
 
 Operação de Multiplicação:
 ```
@@ -320,6 +342,10 @@ int **OperatorMatrix::multiply(int *vetor1, int *vetor2, int n)
     return matrix;
 }
 ```
+
+Complexidade:
+
+- *O(n³)*, as 3 iterações aninhadas, cada uma com n iterações, resultam em n³ iterações 
 
 Obs.: Todos os algoritmos devem ser testados bem como determinado as suas funções de
 complexidade.
